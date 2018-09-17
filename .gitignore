@@ -1,0 +1,12 @@
+node_modules/
+_temp/
+.vscode
+.DS_Store
+.taskkey
+*.log
+
+# Visual Studio User-specific files
+*.suo
+*.user
+*.sln.docstates
+.vs/

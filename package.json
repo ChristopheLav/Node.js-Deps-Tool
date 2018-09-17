@@ -1,0 +1,30 @@
+{
+  "name": "nodejs-deps-tool",
+  "version": "1.0.0",
+  "description": "Analyzes the official Node.js GitHub repository to extract the dependency graph.",
+  "main": "index.js",
+  "scripts": {
+    "analyze": "node make.js analyze",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChristopheLav/Node.js-Deps-Tool.git"
+  },
+  "keywords": [
+    "Node.js",
+    "Dependencies",
+    "Tool"
+  ],
+  "author": "Christophe Lavalle",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ChristopheLav/Node.js-Deps-Tool/issues"
+  },
+  "homepage": "https://github.com/ChristopheLav/Node.js-Deps-Tool#readme",
+  "dependencies": {
+    "semver": "5.5.1",
+    "shelljs": "0.8.2",
+    "sync-request": "6.0.0"
+  }
+}
