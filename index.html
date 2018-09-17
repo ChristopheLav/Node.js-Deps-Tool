@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta charset="utf-8">
@@ -77,7 +77,7 @@
                     $.each(data, function (key, entry) {
                         versions.push(key);
                         $.each(entry, function (eKey, eEntry) {
-                            if (!elements.includes(eKey)) {
+                            if ($.inArray(eKey, elements) === -1) {
                                 elements.push(eKey);
                             }
                         });
@@ -108,7 +108,7 @@
                 } else {
                     $.each(deps, function (key, entry) {
                         var v = entry[newSelectedOption];
-                        if (!versions.includes(v) && v) {
+                        if ($.inArray(v, versions) === -1 && v) {
                             versions.push(v);
                         }
                     });
