@@ -17,13 +17,15 @@
     <body>
         <h1>Node.js Dependencies Tool</h1>
         <p>This tool analyzes the official Node.js GitHub repository to extract the dependencies graph into a JSON file. This Web page allows you to navigate into the dependencies: you can display all dependencies for one version of Node.js or display Node.js versions that contain natively a target dependency (versionned).</p>
+        <br />
+        <input type="checkbox" id="prereleases-checkbox" name="prereleases"> 
+        <label for="prereleases-checkbox">Pre-releases included</label>
         <h2>Select an element:</h2>
         <select id="element-dropdown">
             <option value="NodeJS">Node.js</option>
         </select>
         <h2>Select a version:</h2>
-        <select id="version-dropdown">
-        </select>
+        <select id="version-dropdown"></select>
         <h2>Compatibility:</h2>
         <table>
             <thead>
@@ -32,9 +34,7 @@
                     <th width="200px">Version</th>
                 </tr>
             </thead>
-            <tbody id="compatibility-table">
-
-            </tbody>
+            <tbody id="compatibility-table"></tbody>
         </table>
         <h2>Notes:</h2>
         <p>If you want to overload the embedded version of NPM without upgrade the global version, you follow the below steps.</p>
@@ -44,21 +44,21 @@
         </code>
         <p>Add your local modules path into your PATH environment variable:</p>
         <code>
-                var directory = path.join(__dirname, 'node_modules', '.bin');<br />
-                <br />
-                var separator;<br />
-                if (os.platform() == 'win32') {<br />
-                &nbsp;&nbsp;&nbsp;&nbsp;separator = ';';<br />
-                } else {<br />
-                &nbsp;&nbsp;&nbsp;&nbsp;separator = ':';<br />
-                }<br />
-                <br />
-                var existing = process.env['PATH'];<br />
-                if (existing) {<br />
-                &nbsp;&nbsp;&nbsp;&nbsp;process.env['PATH'] = directory + separator + existing;<br />
-                } else {<br />
-                &nbsp;&nbsp;&nbsp;&nbsp;process.env['PATH'] = directory;<br />
-                }
+            var directory = path.join(__dirname, 'node_modules', '.bin');<br />
+            <br />
+            var separator;<br />
+            if (os.platform() == 'win32') {<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;separator = ';';<br />
+            } else {<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;separator = ':';<br />
+            }<br />
+            <br />
+            var existing = process.env['PATH'];<br />
+            if (existing) {<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;process.env['PATH'] = directory + separator + existing;<br />
+            } else {<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;process.env['PATH'] = directory;<br />
+            }
         </code>
         <footer style="margin-top: 40px">All rights reserved - Christophe Lavalle</footer>
         <script>
@@ -66,6 +66,7 @@
 
             let dropdownElement = $('#element-dropdown');
             let dropdownVersion = $('#version-dropdown');
+            let checkboxPrerelease = document.getElementById('prereleases-checkbox');
             let tableCompatibility = $('#compatibility-table');
 
             function versionCompare(a, b) {
@@ -86,14 +87,17 @@
                 return ret == 0 ? 0 : ret / Math.abs(ret);
             };
 
-            $(document).ready(function(){
+            $(document).ready(function () {
                 dropdownVersion.empty();
                 $.getJSON("/Node.js-Deps-Tool/data/deps.json", function (data) {
                     deps = data;
                     var elements = new Array();
                     var versions = new Array();
+                    var includePrereleases = checkboxPrerelease.checked;
                     $.each(data, function (key, entry) {
-                        versions.push(key);
+                        if (includePrereleases || key.indexOf("-") === -1) {
+                            versions.push(key);
+                        }
                         $.each(entry, function (eKey, eEntry) {
                             if ($.inArray(eKey, elements) === -1) {
                                 elements.push(eKey);
@@ -113,15 +117,22 @@
                 });
             });
 
-            $('#element-dropdown').on('change', function() {
+            $('#prereleases-checkbox').on('change', function () {
+                dropdownElement.change();
+            });
+
+            $('#element-dropdown').on('change', function () {
                 var newSelectedOption = this.value;
-                
+
                 dropdownVersion.empty();
 
                 var versions = new Array();
                 if (newSelectedOption === "NodeJS") {
+                    var includePrereleases = checkboxPrerelease.checked;
                     $.each(deps, function (key, entry) {
-                        versions.push(key);
+                        if (includePrereleases || key.indexOf("-") === -1) {
+                            versions.push(key);
+                        }
                     });
                 } else {
                     $.each(deps, function (key, entry) {
@@ -139,7 +150,7 @@
                 updateCompatibilityTable();
             });
 
-            $('#version-dropdown').on('change', function() {
+            $('#version-dropdown').on('change', function () {
                 updateCompatibilityTable();
             });
 
@@ -150,13 +161,13 @@
                 tableCompatibility.empty();
                 if (selectedElement === "NodeJS") {
                     var v = deps[selectedVersion];
-                    $.each(v, function(key, entry) {
-                        tableCompatibility.append( '<tr><td>' + key + '</td><td>' + entry + '</td></tr>');
+                    $.each(v, function (key, entry) {
+                        tableCompatibility.append('<tr><td>' + key + '</td><td>' + entry + '</td></tr>');
                     });
                 } else {
-                    $.each(deps, function(key, entry) {
+                    $.each(deps, function (key, entry) {
                         if (entry[selectedElement] === selectedVersion) {
-                            tableCompatibility.append( '<tr><td>Node.js</td><td>' + key + '</td></tr>');
+                            tableCompatibility.append('<tr><td>Node.js</td><td>' + key + '</td></tr>');
                         }
                     });
                 }

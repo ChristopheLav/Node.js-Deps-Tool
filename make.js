@@ -71,25 +71,16 @@ target.analyze = function() {
                 var version_match = version_regex.exec(element["ref"]);
                 if (version_match != null) {
 
-                    // only release versions are targated
+                    // only unprocessed release will be processed to preserve GitHub APIs rate limit
                     var version = version_match[1];
-                    if (!version.includes("-")) {
+                    if (deps[version] == null) {
 
-                        // only unprocessed release will be processed to preserve GitHub APIs rate limit
-                        if (deps[version] == null) {
-
-                            // get dependencies data for this version
-                            deps[version] = getDependenciesData(version, version);
-
-                        } else {
-
-                            console.log("Skip version '" + version + "', it is already processed");
-
-                        }
+                        // get dependencies data for this version
+                        deps[version] = getDependenciesData(version, version);
 
                     } else {
 
-                        console.log("Skip prerelease version '" + version + "'");
+                        console.log("Skip version '" + version + "', it is already processed");
 
                     }
 

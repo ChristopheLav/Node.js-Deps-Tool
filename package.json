@@ -1,6 +1,6 @@
 {
   "name": "nodejs-deps-tool",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Analyzes the official Node.js GitHub repository to extract the dependency graph.",
   "main": "index.js",
   "scripts": {
