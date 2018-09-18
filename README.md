@@ -34,3 +34,7 @@ In the `data` directory, the file `deps.json` will be generated. You can use the
 ## Use the tool
 
 You can use [this page](https://ChristopheLav.github.io/Node.js-Deps-Tool) - that is the last available version of the tool and the last Node.js dependencies graph data.
+
+## Changelog
+
+The changelog is available [here](CHANGELOG.md).

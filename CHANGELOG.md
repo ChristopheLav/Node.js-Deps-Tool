@@ -1,5 +1,17 @@
 # Node.js Dependencies Tool Changelog
 
+## 2018-09-18, Version 1.1.0
+
+* New
+    * n/a
+
+* Updates
+    * Support pre-release Node.js versions
+
+* Fixes
+
+    * n/a
+
 ## 2018-09-16, Version 1.0.0
 
 * New
