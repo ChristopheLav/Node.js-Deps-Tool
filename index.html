@@ -66,7 +66,7 @@
 
             let dropdownElement = $('#element-dropdown');
             let dropdownVersion = $('#version-dropdown');
-            let checkboxPrerelease = document.getElementById('prereleases-checkbox');
+            let checkboxPrerelease = $('#prereleases-checkbox');
             let tableCompatibility = $('#compatibility-table');
 
             function versionCompare(a, b) {
@@ -93,7 +93,7 @@
                     deps = data;
                     var elements = new Array();
                     var versions = new Array();
-                    var includePrereleases = checkboxPrerelease.checked;
+                    var includePrereleases = checkboxPrerelease.is(":checked");
                     $.each(data, function (key, entry) {
                         if (includePrereleases || key.indexOf("-") === -1) {
                             versions.push(key);
@@ -118,7 +118,13 @@
             });
 
             $('#prereleases-checkbox').on('change', function () {
-                dropdownElement.change();
+                if (dropdownElement.val() === "NodeJS") {
+                    var selectedValue = dropdownVersion.val();
+                    dropdownElement.change();
+                    dropdownVersion.val(selectedValue);
+                } else {
+                    updateCompatibilityTable();
+                }
             });
 
             $('#element-dropdown').on('change', function () {
@@ -128,7 +134,7 @@
 
                 var versions = new Array();
                 if (newSelectedOption === "NodeJS") {
-                    var includePrereleases = checkboxPrerelease.checked;
+                    var includePrereleases = checkboxPrerelease.is(":checked");
                     $.each(deps, function (key, entry) {
                         if (includePrereleases || key.indexOf("-") === -1) {
                             versions.push(key);
@@ -155,8 +161,8 @@
             });
 
             function updateCompatibilityTable() {
-                var selectedElement = $("#element-dropdown option:selected").val();
-                var selectedVersion = $("#version-dropdown option:selected").val();
+                var selectedElement = dropdownElement.val();
+                var selectedVersion = dropdownVersion.val();
 
                 tableCompatibility.empty();
                 if (selectedElement === "NodeJS") {
@@ -165,8 +171,9 @@
                         tableCompatibility.append('<tr><td>' + key + '</td><td>' + entry + '</td></tr>');
                     });
                 } else {
+                    var includePrereleases = checkboxPrerelease.is(":checked");
                     $.each(deps, function (key, entry) {
-                        if (entry[selectedElement] === selectedVersion) {
+                        if (entry[selectedElement] === selectedVersion && (includePrereleases || key.indexOf("-") === -1)) {
                             tableCompatibility.append('<tr><td>Node.js</td><td>' + key + '</td></tr>');
                         }
                     });
