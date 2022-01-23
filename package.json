@@ -23,8 +23,8 @@
   },
   "homepage": "https://github.com/ChristopheLav/Node.js-Deps-Tool#readme",
   "dependencies": {
-    "semver": "5.5.1",
-    "shelljs": "0.8.2",
-    "sync-request": "6.0.0"
+    "semver": "7.3.5",
+    "shelljs": "0.8.5",
+    "sync-request": "6.1.0"
   }
 }
